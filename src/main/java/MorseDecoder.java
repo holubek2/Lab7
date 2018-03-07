@@ -52,9 +52,15 @@ public class MorseDecoder {
         double[] returnBuffer = new double[totalBinCount];
 
         double[] sampleBuffer = new double[BIN_SIZE * inputFile.getNumChannels()];
+        inputFile.readFrames(sampleBuffer, BIN_SIZE);
+        int sampleSum = 0;
         for (int binIndex = 0; binIndex < totalBinCount; binIndex++) {
+            for (int sampleIndex = 0; sampleIndex < sampleBuffer.length; sampleIndex++) {
+                sampleSum += sampleBuffer[sampleIndex];
+            }
             // Get the right number of samples from the inputFile
             // Sum all the samples together and store them in the returnBuffer
+            returnBuffer[binIndex] = Math.abs(sampleSum);
         }
         return returnBuffer;
     }
@@ -193,6 +199,7 @@ public class MorseDecoder {
      * @param unused unused input arguments
      */
     public static void main(final String[] unused) {
+        System.out.println(MORSE_TO_ALPHA);
 
         String inputPrompt = String.format("Enter the WAV filename (in src/main/resources):");
         Scanner lineScanner = new Scanner(System.in);
